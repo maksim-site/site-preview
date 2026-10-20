@@ -80,7 +80,7 @@
   };
   let manifest, manifestLoading = false, raf = 0, inView = true;
   let start = 0, distance = 1, height = 0, coveredAt = Infinity, pinned = false;
-  let progress = 0, motion = 0, target = 0, drawn = -1, direction = 1, lastTick = 0, position = 0;
+  let progress = 0, filmProgress = 0, motion = 0, target = 0, drawn = -1, direction = 1, lastTick = 0, position = 0;
   let contextLost = false, blendFrames = true;
   let fetching = 0, decoding = 0, retryTimer = 0;
   const chunks = new Map(), fetchingChunks = new Set(), retryAfter = new Map();
@@ -94,7 +94,7 @@
   function wanted() {
     const low = Math.floor(position), high = Math.ceil(position);
     const order = blendFrames ? [low, high] : [target];
-    const destination = Math.round(progress * lastFrame());
+    const destination = Math.round(filmProgress * lastFrame());
     // Ready both sides of the fractional pose before advancing. Also prepare
     // the wheel's destination, so a fast gesture cannot starve its final frame.
     if (Math.abs(destination - target) > 4) order.push(destination, destination + direction);
@@ -142,9 +142,12 @@
   }
   function pumpNetwork() {
     if (!manifest || !active()) return;
-    const priority = [...new Set([...wanted().map(i => manifest.frames[i][0]), ...manifest.chunks.map((_, i) => i)])];
+    const lastPart = manifest.chunks.length - 1;
+    // Fetch the end early as well as the current pose. A first quick swipe
+    // must not wait for every preceding network request to finish.
+    const priority = [...new Set([...wanted().map(i => manifest.frames[i][0]), lastPart, Math.floor(lastPart / 2), ...manifest.chunks.map((_, i) => i)])];
     for (const part of priority) {
-      if (fetching >= 2) break;
+      if (fetching >= 4) break;
       if (chunks.has(part) || fetchingChunks.has(part) || (retryAfter.get(part) ?? 0) > Date.now()) continue;
       fetching++; fetchingChunks.add(part);
       fetch(manifest.chunks[part], { cache: 'force-cache' }).then(response => {
@@ -179,8 +182,8 @@
     const previous = motion;
     // A short, time-based response (38 ms) smooths wheel packets without a
     // separate playback timeline. Reversing the scroll immediately retargets it.
-    motion += (progress - motion) * (1 - Math.exp(-delta / 38));
-    if (Math.abs(progress - motion) * lastFrame() < .08) motion = progress;
+    motion += (filmProgress - motion) * (1 - Math.exp(-delta / 38));
+    if (Math.abs(filmProgress - motion) * lastFrame() < .08) motion = filmProgress;
     if (motion !== previous) direction = motion > previous ? 1 : -1;
     // At fast speeds each refresh already advances a whole source frame.
     // Only slow motion needs subframe blending; avoid two texture uploads
@@ -212,6 +215,10 @@
   function update(now) {
     raf = 0;
     progress = reduced.matches ? 0 : clamp((scrollY - start) / distance);
+    // Reveal the motion in the first screen, before the services panel covers
+    // it: accelerate through the film's quiet opening and finish at 65% scroll.
+    filmProgress = 1 - (1 - clamp(progress / .65)) ** 2;
+    canvas.dataset.targetFrame = Math.round(filmProgress * lastFrame());
     copy.style.setProperty('--hero-copy-opacity', pinned ? 1 - smooth(.08, .98, progress) : 1);
     copy.style.setProperty('--hero-copy-y', pinned ? `${-height * .18 * progress}px` : '0px');
     copy.inert = pinned && progress > .95;
@@ -224,7 +231,7 @@
     }
     advance(now);
     draw(); pumpDecodes(); pumpNetwork(); load();
-    if (motion !== progress) schedule();
+    if (motion !== filmProgress) schedule();
   }
   function measure() {
     height = hero.offsetHeight;
