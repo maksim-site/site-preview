@@ -1,7 +1,8 @@
 /* The approved Seedance film, on the selected homepage only. */
 .hero-story{position:relative}
-.hero-video,.hero-video-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;pointer-events:none;transition:opacity .4s ease;filter:saturate(calc(1 - var(--theme-progress)*.7)) brightness(calc(1 + var(--theme-progress)*.5)) contrast(calc(1 - var(--theme-progress)*.3))}
-.hero-video-poster{opacity:1;transition:none}
+.hero-video,.hero-video-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;pointer-events:none;transition:opacity .4s ease,filter 650ms cubic-bezier(.4,0,.2,1);filter:none}
+.hero-video-poster{opacity:1;transition:filter 650ms cubic-bezier(.4,0,.2,1)}
+[data-theme=light] .hero-video,[data-theme=light] .hero-video-poster{filter:saturate(.3) brightness(1.5) contrast(.7)}
 .hero-video-ready .hero-video{opacity:1}
 .hero-video-page .metal-reflection{background-image:radial-gradient(ellipse 38% 55% at var(--cursor-x) var(--cursor-y),#eef1ec22,transparent 75%);mask-image:none;filter:none;opacity:var(--cursor-opacity)}
 
@@ -23,6 +24,7 @@
 }
 @media(prefers-reduced-motion:reduce){
   .hero-video{display:none;transition:none}
+  .hero-video-poster{transition:none}
   .hero-motion .hero-story{height:auto}
   .hero-motion .hero-story .hero{position:relative}
   .hero-motion .hero-grid{opacity:1;transform:none;will-change:auto}

@@ -63,14 +63,16 @@
       const [part, offset, size] = manifest.frames[index];
       if (images.has(index) || decodingFrames.has(index) || !chunks.has(part)) continue;
       decoding++; decodingFrames.add(index);
+      let succeeded = false;
       decode(chunks.get(part).slice(offset, offset + size, 'image/webp')).then(image => {
+        succeeded = true;
         if (!active() || !wanted().includes(index)) { image.close?.(); return; }
         images.set(index, image); trim(); schedule();
       }).catch(() => { /* Keep the previous valid frame if this decode fails. */ }).finally(() => {
         decoding--; decodingFrames.delete(index);
         // Only continue when something is available; never spin a RAF waiting
         // for a download, media callback, or an offscreen animation.
-        if (active() && images.has(index)) pumpDecodes();
+        if (active() && succeeded) pumpDecodes();
       });
     }
   }
