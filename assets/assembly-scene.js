@@ -22,7 +22,7 @@
     if (!visible) return;
     // Do not compile a WebGL scene while the hero film is still prominent.
     // Its matching still image covers this brief overlap between sections.
-    if (!loading && experience.closest('.services').getBoundingClientRect().top < Math.min(180, innerHeight * .2)) init();
+    if (!loading && (experience.closest('.services').getBoundingClientRect().top < Math.min(180, innerHeight * .2) || stage.getBoundingClientRect().bottom <= innerHeight)) init();
     const rect = experience.getBoundingClientRect();
     target = reduced.matches ? 1 : clamp((innerHeight * .7 - rect.top) / Math.min(rect.height, innerHeight * 1.2));
     schedule();

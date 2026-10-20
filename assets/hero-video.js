@@ -212,6 +212,12 @@
   function markReady() {
     if (video.readyState < 2 || failed) return;
     ready = true;
+    // loadeddata already provides frame zero. Seeking to that same frame can
+    // produce no presentation callback in WebKit, despite a healthy decoder.
+    if (!pending && completedFrame < 0 && video.currentTime < 1 / fps) {
+      completedFrame = 0;
+      presentedFrame = 0;
+    }
     root.classList.toggle('hero-video-ready', !reduced.matches);
     schedule();
   }
