@@ -1,0 +1,67 @@
+/* The approved Seedance film, on the selected homepage only. */
+.hero-story{position:relative}
+.hero-video,.hero-video-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;opacity:0;pointer-events:none;transition:opacity .4s ease;filter:saturate(calc(1 - var(--theme-progress)*.7)) brightness(calc(1 + var(--theme-progress)*.5)) contrast(calc(1 - var(--theme-progress)*.3))}
+.hero-video-poster{opacity:1;transition:none}
+.hero-video-ready .hero-video{opacity:1}
+.hero-video-page .metal-reflection{background-image:radial-gradient(ellipse 38% 55% at var(--cursor-x) var(--cursor-y),#eef1ec22,transparent 75%);mask-image:none;filter:none;opacity:var(--cursor-opacity)}
+
+/* No scroll interception: services cover the pinned hero in normal flow. */
+.hero-motion .hero-story{height:calc(var(--hero-height,100svh) + 70svh)}
+.hero-motion .hero-story .hero{position:sticky;top:0}
+.hero-motion .hero-grid{opacity:var(--hero-copy-opacity,1);transform:translate3d(0,var(--hero-copy-y,0px),0);will-change:transform,opacity}
+.hero-motion .hero-story+.services{position:relative;z-index:2;margin-top:-65svh;border-radius:28px 28px 0 0}
+.hero-video-page .hero-story .hero-grid{min-height:0}
+.hero-video-page .hero-story .hero{padding-top:clamp(135px,20svh,178px);padding-bottom:clamp(44px,10svh,98px)}
+
+@media(max-width:899px){.hero-video-page .site-header.scrolled{top:14px}}
+@media(max-width:599px){
+  .hero-video-page .site-header.scrolled{top:12px}
+  .hero-video,.hero-video-poster{object-position:58% center}
+  .hero-motion .hero-story{height:calc(var(--hero-height,100svh) + 60svh)}
+  .hero-motion .hero-story+.services{margin-top:-55svh;border-radius:22px 22px 0 0}
+  .hero-video-page .hero-story .hero{padding-top:135px;padding-bottom:65px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-video{display:none;transition:none}
+  .hero-motion .hero-story{height:auto}
+  .hero-motion .hero-story .hero{position:relative}
+  .hero-motion .hero-grid{opacity:1;transform:none;will-change:auto}
+  .hero-motion .hero-story+.services{margin-top:0}
+}
+@media print{
+  .hero-video{display:none}
+  .hero-motion .hero-story{height:auto}
+  .hero-motion .hero-story .hero{position:relative}
+  .hero-motion .hero-grid{opacity:1;transform:none}
+  .hero-motion .hero-story+.services{margin-top:0}
+}
+
+/* Installed in the head, before any hero text can paint. No-JS stays visible. */
+.hero-intro-pending .hero-video-page .hero-copy>*{opacity:0;visibility:hidden}
+@media(prefers-reduced-motion:reduce){.hero-intro-pending .hero-video-page .hero-copy>*{opacity:1;visibility:visible}}
+@media print{.hero-intro-pending .hero-video-page .hero-copy>*{opacity:1;visibility:visible}}
+
+/* Readable navigation and a less cramped mobile capsule. */
+.hero-video-page .hero-kicker{font-size:clamp(14px,1.15vw,18px);line-height:1.5}
+@media(min-width:900px){
+  .hero-video-page .header-actions{margin-left:-14px}
+  .hero-video-page .main-nav a,.hero-video-page .header-cta{font-size:14px}
+}
+@media(max-width:899px){
+  .hero-video-page .header-inner{width:min(560px,calc(100% - 28px));max-width:calc(100% - 28px)}
+  .hero-video-page .header-cta{font-size:14px}
+}
+@media(max-width:599px){
+  .hero-video-page .header-inner{padding-inline:18px 12px}
+  .hero-video-page .hero-kicker{font-size:14px;max-width:100%}
+}
+
+/* Keep the request action while it fits; size the wider mobile capsule to its content. */
+@media(min-width:440px) and (max-width:899px){
+  .hero-video-page .header-inner{width:max-content;gap:20px}
+  .hero-video-page .header-actions{gap:8px}
+  .hero-video-page .header-cta{display:flex;white-space:nowrap;flex-shrink:0}
+}
+@media(min-width:440px) and (max-width:599px){
+  .hero-video-page .header-cta{font-size:13px;padding-inline:18px}
+}

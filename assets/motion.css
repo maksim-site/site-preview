@@ -1,0 +1,6 @@
+/* Only JavaScript-enrolled elements wait for an entrance; no-JS stays readable. */
+[data-reveal=waiting]{opacity:0}
+.reveal-line{display:block;overflow:clip;padding-bottom:.14em;margin-bottom:-.14em}
+.reveal-line>span{display:block;transform-origin:50% 100%}
+@media(prefers-reduced-motion:reduce){[data-reveal=waiting]{opacity:1!important}}
+@media print{[data-reveal=waiting]{opacity:1!important}}

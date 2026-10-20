@@ -1,0 +1,16 @@
+/* An abstract assembly, not a claim about a particular supplied product. */
+.assembly-stage{position:relative;height:395px;touch-action:pan-y}
+.assembly-stage::after{content:"";position:absolute;left:16%;right:16%;bottom:3%;height:12%;border-radius:50%;background:radial-gradient(ellipse,#39464b2e,transparent 68%);filter:blur(10px);pointer-events:none}
+.assembly-stage canvas,.assembly-still{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.assembly-stage canvas{opacity:0;transition:opacity .3s ease;z-index:1}
+.assembly-still{transition:none}
+.assembly-stage.is-loading .assembly-still{visibility:hidden}
+.assembly-stage.is-loading::after{opacity:0}
+.assembly-stage.is-ready canvas{opacity:1}
+.assembly-stage.is-ready .assembly-still{opacity:0}
+.assembly-scene .cube-caption{padding:16px 6% 0 8%}
+@media(max-width:1199px){.assembly-stage{height:340px}}
+@media(max-width:899px){.assembly-stage{height:290px}}
+@media(max-width:599px){.assembly-scene{display:block}.assembly-stage{height:300px;max-width:390px;margin-inline:auto}.assembly-scene .cube-caption{padding:4px 0 22px;text-align:center;font-size:18px}.assembly-scene .cube-caption br{display:initial}}
+@media(prefers-reduced-motion:reduce){.assembly-stage canvas,.assembly-still{transition:none}}
+@media print{.assembly-stage canvas{display:none}.assembly-stage .assembly-still{opacity:1;visibility:visible}}

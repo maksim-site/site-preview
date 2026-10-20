@@ -1,0 +1,74 @@
+/* A single, stationary photograph. Theme changes alter the lighting only. */
+[data-direction=metal] .hero{--metal-image:url('/site-preview/assets/images/direction-metal.png');--cursor-x:70%;--cursor-y:40%;--cursor-opacity:0;isolation:isolate;background:#171c1c}
+[data-direction=metal] .hero::before{display:none}
+[data-direction=metal] .hero::after{background:linear-gradient(90deg,#121616da,#14171658 54%,#10131300 80%),linear-gradient(0deg,#1b2022,transparent 23%)}
+.metal-backdrop{position:absolute;inset:0;z-index:-2;pointer-events:none}
+.metal-image,.metal-reflection{position:absolute;inset:0;pointer-events:none;background-position:center;background-size:cover;background-repeat:no-repeat}
+.metal-image{transition:opacity 650ms cubic-bezier(.4,0,.2,1)}
+.metal-image-dark{background-image:url('/site-preview/assets/images/direction-metal.png')}
+.metal-image-light{background-image:url('/site-preview/assets/images/direction-metal-light.png');opacity:0;filter:saturate(.2) contrast(.94)}
+.metal-reflection{filter:brightness(1.35) saturate(.55);mask-image:radial-gradient(ellipse 32% 50% at var(--cursor-x) var(--cursor-y),#000c,transparent 85%);opacity:var(--cursor-opacity);transition:opacity 350ms ease}
+[data-selected] .site-footer{padding-bottom:42px}
+:root[data-theme=light]{--bg:#e6e9ec;--deep:#d9dfe3;--surface:#f0f2f3;--text:#29333b;--muted:#56636c;--soft:#66737b;--line:#bac4cb;--accent:#85664f;--glass:rgba(235,239,242,.86);--glass-edge:#667b8b33;--glass-high:#ffffffb3;--panel:#c3cdd452;--field:#e1e7eb;--field-focus:#eef2f5;--field-edge:#9eacb7;--form-text:#2e3b43;--form-muted:#536571}
+[data-theme=light] [data-direction=metal] .hero{--metal-image:url('/site-preview/assets/images/direction-metal-light.png');--text:#29343d;--muted:#52616c;--soft:#65737c;background:#e6e9ec;color:var(--text)}
+[data-theme=light] .metal-image-light{opacity:1}
+[data-theme=light] .metal-image-dark{opacity:0}
+[data-theme=light] [data-direction=metal] .hero::after{background:linear-gradient(90deg,#e6e9eceb,#e6e9ec80 48%,#e6e9ec08 80%),linear-gradient(0deg,#e6e9ec,transparent 24%)}
+[data-theme=light] [data-direction=metal] .hero h1{text-shadow:none}
+[data-theme=light] [data-direction=metal] .hero .title-mask:first-child .metal-type{color:#29343d}
+[data-theme=light] [data-direction=metal] .hero .title-mask:last-child .metal-type{color:#566672}
+[data-theme=light] [data-direction=metal] .hero-subtitle{color:#394954}
+[data-theme=light] [data-direction=metal] .hero-description,[data-theme=light] [data-direction=metal] .hero-kicker{color:#52616c}
+[data-theme=light] [data-direction=metal] .hero .button-primary{background:#35454f;border-color:#4b5f6b;color:#f4f6f7;box-shadow:inset 0 1px 0 #fff3,0 8px 24px #314b601c}
+[data-theme=light] [data-direction=metal] .hero .button-primary:hover{background:#425967}
+[data-theme=light] [data-direction=metal] .services{background:linear-gradient(110deg,#e1e6ea,#f0f3f5 60%,#dde4e8)}
+[data-theme=light] .metal-reflection{filter:brightness(1.13) saturate(.2)}
+/* Animate theme colors in place, without flattening the live 3D scene. */
+@property --theme-progress{syntax:"<number>";inherits:true;initial-value:0}
+:root{--theme-progress:0;--theme-mix:calc(var(--theme-progress)*100%);transition:--theme-progress 650ms cubic-bezier(.4,0,.2,1)}
+:root[data-theme=light]{--theme-progress:1}
+body,.header-inner,.hero-kicker,.hero-subtitle,.hero-description,.metal-type{transition:background-color 650ms cubic-bezier(.4,0,.2,1),color 650ms cubic-bezier(.4,0,.2,1),border-color 650ms cubic-bezier(.4,0,.2,1)}
+@media(max-width:599px){.metal-image,.metal-reflection{background-position:58% center}[data-direction=metal] .hero::after{background:linear-gradient(90deg,#121616db,#12161682 68%,#12161640),linear-gradient(0deg,#1b2022,transparent 38%)}[data-theme=light] [data-direction=metal] .hero::after{background:linear-gradient(90deg,#e6e9ecef,#e6e9ecb0 68%,#e6e9ec70),linear-gradient(0deg,#e6e9ec,transparent 38%)}}
+@media(prefers-reduced-motion:reduce){.metal-reflection{display:none}}
+@media print{.metal-backdrop{display:none}}
+
+/* Matching layers and gradient stops share one reversible lighting progress. */
+[data-direction=metal] .metal-image-light,[data-theme=light] [data-direction=metal] .metal-image-light{opacity:var(--theme-progress);transition:none}
+[data-direction=metal] .metal-image-dark,[data-theme=light] [data-direction=metal] .metal-image-dark{opacity:calc(1 - var(--theme-progress));transition:none}
+[data-direction=metal] .hero::after,[data-theme=light] [data-direction=metal] .hero::after{background:linear-gradient(90deg,color-mix(in srgb,#121616da,#e6e9eceb var(--theme-mix)),color-mix(in srgb,#14171658,#e6e9ec80 var(--theme-mix)) 54%,color-mix(in srgb,#10131300,#e6e9ec08 var(--theme-mix)) 80%),linear-gradient(0deg,color-mix(in srgb,#1b2022,#e6e9ec var(--theme-mix)),transparent 24%)}
+[data-direction=metal] .services,[data-theme=light] [data-direction=metal] .services{background:linear-gradient(110deg,color-mix(in srgb,#e6e5dd,#e1e6ea var(--theme-mix)),color-mix(in srgb,#f2f0e8,#f0f3f5 var(--theme-mix)) 60%,color-mix(in srgb,#e1dfd4,#dde4e8 var(--theme-mix)))}
+[data-direction=metal] .hero .button-primary,[data-theme=light] [data-direction=metal] .hero .button-primary{background:linear-gradient(145deg,color-mix(in srgb,#e5c39e,#35454f var(--theme-mix)),color-mix(in srgb,#c9a17e,#35454f var(--theme-mix)));color:color-mix(in srgb,#272b2b,#f4f6f7 var(--theme-mix));border-color:color-mix(in srgb,#e7c6a3,#4b5f6b var(--theme-mix))}
+@media(max-width:599px){[data-direction=metal] .hero::after,[data-theme=light] [data-direction=metal] .hero::after{background:linear-gradient(90deg,color-mix(in srgb,#121616db,#e6e9ecef var(--theme-mix)),color-mix(in srgb,#12161682,#e6e9ecb0 var(--theme-mix)) 68%,color-mix(in srgb,#12161640,#e6e9ec70 var(--theme-mix))),linear-gradient(0deg,color-mix(in srgb,#1b2022,#e6e9ec var(--theme-mix)),transparent 38%)}}
+
+/* The selected site's sections share graphite, steel and warm copper. */
+body[data-selected][data-direction=metal] .services{
+ --ink:color-mix(in srgb,#eceeea,#29353c var(--theme-mix));
+ --paper-muted:color-mix(in srgb,#b3bfc1,#4f6069 var(--theme-mix));
+ --paper-line:color-mix(in srgb,#536064,#b6c3c9 var(--theme-mix));
+ --muted:var(--paper-muted);--line:var(--paper-line);
+ --accent:color-mix(in srgb,#d3aa87,#85664f var(--theme-mix));
+ color:var(--ink);
+ background:linear-gradient(120deg,color-mix(in srgb,#283235,#d5dfe4 var(--theme-mix)),color-mix(in srgb,#303a3c,#e3e9ec var(--theme-mix)) 60%,color-mix(in srgb,#293132,#d4dee3 var(--theme-mix)));
+ box-shadow:inset 0 1px 0 color-mix(in srgb,#b0c1c12b,#ffffff80 var(--theme-mix));
+}
+[data-selected] .services .service{border-top-color:var(--paper-line)}
+[data-selected] .services .service:last-child{border-bottom-color:var(--paper-line)}
+[data-selected] .services .service-icon{color:var(--accent);background:color-mix(in srgb,#d3aa8712,#59707d12 var(--theme-mix))}
+[data-selected] .services .cube-caption,[data-selected] .services .service-note{color:var(--paper-muted)}
+[data-selected] .questions{background:color-mix(in srgb,#1c2427,#e7ecef var(--theme-mix))}
+[data-selected] .contact{
+ background:radial-gradient(ellipse at 78% 40%,color-mix(in srgb,#aa886311,#a9bac52b var(--theme-mix)),transparent 65%),color-mix(in srgb,#303331,#d7dfe1 var(--theme-mix));
+ border-top-color:color-mix(in srgb,#555a554d,#afbdc5 var(--theme-mix));
+ --panel:color-mix(in srgb,#353d3ce6,#e0e6e9cc var(--theme-mix));
+ --field:color-mix(in srgb,#272f30,#eaf0f2 var(--theme-mix));
+ --field-focus:color-mix(in srgb,#303b3d,#f2f5f7 var(--theme-mix));
+ --field-edge:color-mix(in srgb,#606b6b,#9eacb7 var(--theme-mix));
+ --form-muted:color-mix(in srgb,#bcc4c2,#536571 var(--theme-mix));
+}
+[data-selected] .site-footer{background:color-mix(in srgb,#1b2022,#cbd5db var(--theme-mix))}
+@media print{[data-selected] .services{--ink:#202a2e;--paper-muted:#4b5a61;--paper-line:#aab5bb;background:#fff;box-shadow:none}}
+[data-selected] .kind-choices input:checked+span{background:linear-gradient(135deg,color-mix(in srgb,#d8c5ad,#ded1bf var(--theme-mix)),color-mix(in srgb,#bda98f,#c6b59f var(--theme-mix)));border-color:color-mix(in srgb,#d6c0a5,#a38c71 var(--theme-mix));color:#2c302e}
+[data-selected] .kind-choices input:checked+span small{color:#4d504a}
+
+/* The main video has its own matching frame; photograph reflection is for comparison pages only. */
+body:not(.hero-video-page) .metal-reflection{background-image:var(--metal-image)}
