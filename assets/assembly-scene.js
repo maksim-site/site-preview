@@ -8,7 +8,7 @@
   const clamp = x => Math.max(0, Math.min(1, x));
   let visible = false, loading = false, drawScene, frame = 0, last = 0;
   let target = 0, progress = 0, pointerX = 0, pointerY = 0, x = 0, y = 0;
-  let measureScene, lost = false;
+  let measureScene, lost = false, warmQueued = false;
   // The still is a failure fallback, not a differently posed loading frame.
   stage.classList.add('is-loading');
   function showFallback() {
@@ -19,10 +19,8 @@
     if (!frame && visible && !document.hidden && drawScene && !lost) frame = requestAnimationFrame(draw);
   }
   function updateTarget() {
-    if (!visible) return;
-    // Do not compile a WebGL scene while the hero film is still prominent.
-    // Its matching still image covers this brief overlap between sections.
-    if (!loading && (experience.closest('.services').getBoundingClientRect().top < Math.min(180, innerHeight * .2) || stage.getBoundingClientRect().bottom <= innerHeight)) init();
+    // Fast scroll/anchor navigation can arrive before idle preparation completes.
+    if (visible && !loading) init();
     const rect = experience.getBoundingClientRect();
     target = reduced.matches ? 1 : clamp((innerHeight * .7 - rect.top) / Math.min(rect.height, innerHeight * 1.2));
     schedule();
@@ -45,6 +43,12 @@
     loading = true;
     try {
       const T = await import('./motion-study/vendor/three.module.js');
+      // Network warming starts in the head. Build the offscreen scene in an
+      // idle slot after the hero's first frame, rather than on its first scroll.
+      if (!visible) await new Promise(resolve => {
+        if ('requestIdleCallback' in window) requestIdleCallback(resolve, { timeout: 1000 });
+        else setTimeout(resolve, 0);
+      });
       const renderer = new T.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
       renderer.setPixelRatio(Math.min(devicePixelRatio, fine.matches ? 1.75 : 1.25));
       renderer.setClearColor(0, 0);
@@ -123,6 +127,7 @@
         renderer.render(scene, camera);
         stage.classList.remove('is-loading', 'is-fallback');
         stage.classList.add('is-ready');
+        stage.classList.toggle('is-visible', visible && !document.hidden);
       };
       measureScene = () => {
         const w = stage.clientWidth, h = stage.clientHeight;
@@ -134,8 +139,12 @@
         camera.updateProjectionMatrix(); schedule();
       };
       new ResizeObserver(measureScene).observe(stage);
-      measureScene(); updateTarget();
-      progress = target; schedule();
+      measureScene();
+      await renderer.compileAsync(scene, camera);
+      updateTarget(); progress = target;
+      // One warm frame also uploads geometry before the section is reached.
+      if (!document.hidden) drawScene(progress, reduced.matches ? 0 : x, reduced.matches ? 0 : y);
+      schedule();
       canvas.addEventListener('webglcontextlost', event => { event.preventDefault(); lost = true; showFallback(); cancelAnimationFrame(frame); frame = 0; });
       canvas.addEventListener('webglcontextrestored', () => { lost = false; stage.classList.add('is-loading'); updateTarget(); progress = target; last = 0; schedule(); });
     } catch {
@@ -145,9 +154,30 @@
   }
   new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
-    if (visible) { last = 0; updateTarget(); progress = target; x = pointerX; y = pointerY; }
-    else { cancelAnimationFrame(frame); frame = 0; last = 0; }
+    if (visible) {
+      last = 0; updateTarget(); progress = target; x = pointerX; y = pointerY;
+      // Synchronize the pose before exposing a previously warmed canvas.
+      if (drawScene && !lost && !document.hidden) drawScene(progress, reduced.matches ? 0 : x, reduced.matches ? 0 : y);
+    }
+    else { stage.classList.remove('is-visible'); cancelAnimationFrame(frame); frame = 0; last = 0; }
   }, { rootMargin: '100px' }).observe(stage);
+  function warmUp() {
+    if (loading || warmQueued || document.hidden) return;
+    warmQueued = true;
+    const prepare = () => { warmQueued = false; if (!document.hidden) init(); };
+    if ('requestIdleCallback' in window) requestIdleCallback(prepare, { timeout: 1000 });
+    else setTimeout(prepare, 250);
+  }
+  const heroCanvas = document.querySelector('.hero-video');
+  if (!heroCanvas || heroCanvas.hasAttribute('data-frame') || reduced.matches) warmUp();
+  else {
+    const firstFrame = new MutationObserver(() => {
+      firstFrame.disconnect(); clearTimeout(warmFallback); warmUp();
+    });
+    firstFrame.observe(heroCanvas, { attributes: true, attributeFilter: ['data-frame'] });
+    // A failed hero must not prevent the next section from preparing.
+    const warmFallback = setTimeout(() => { firstFrame.disconnect(); warmUp(); }, 1200);
+  }
   addEventListener('scroll', updateTarget, { passive: true });
   addEventListener('resize', updateTarget, { passive: true });
   stage.addEventListener('pointermove', event => {
@@ -164,7 +194,7 @@
     updateTarget();
   });
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { cancelAnimationFrame(frame); frame = 0; }
-    else { last = 0; updateTarget(); progress = target; schedule(); }
+    if (document.hidden) { stage.classList.remove('is-visible'); cancelAnimationFrame(frame); frame = 0; }
+    else { last = 0; warmUp(); updateTarget(); progress = target; schedule(); }
   });
 })();

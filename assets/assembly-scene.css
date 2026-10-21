@@ -2,7 +2,8 @@
 .assembly-stage{position:relative;height:395px;touch-action:pan-y}
 .assembly-stage::after{content:"";position:absolute;left:16%;right:16%;bottom:3%;height:12%;border-radius:50%;background:radial-gradient(ellipse,#39464b2e,transparent 68%);filter:blur(10px);pointer-events:none}
 .assembly-stage canvas,.assembly-still{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-.assembly-stage canvas{opacity:0;transition:opacity .3s ease;z-index:1}
+.assembly-stage canvas{opacity:0;visibility:hidden;transition:opacity .3s ease;z-index:1}
+.assembly-stage.is-visible canvas{visibility:visible}
 .assembly-still{transition:none}
 .assembly-stage.is-loading .assembly-still{visibility:hidden}
 .assembly-stage.is-loading::after{opacity:0}
