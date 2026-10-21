@@ -70,6 +70,7 @@
 
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const nativeCopyMotion = CSS.supports('animation-timeline: scroll(root block)') && CSS.supports('animation-range: 0px 100px');
   const mobile = matchMedia('(max-width: 899px), (pointer: coarse)').matches;
   const manifestURL = mobile ? canvas.dataset.mobileSrc : canvas.dataset.src;
   const cacheLimit = mobile ? 14 : 12;
@@ -219,9 +220,17 @@
     // it: accelerate through the film's quiet opening and finish at 65% scroll.
     filmProgress = 1 - (1 - clamp(progress / .65)) ** 2;
     canvas.dataset.targetFrame = Math.round(filmProgress * lastFrame());
-    copy.style.setProperty('--hero-copy-opacity', pinned ? 1 - smooth(.08, .98, progress) : 1);
-    copy.style.setProperty('--hero-copy-y', pinned ? `${-height * .18 * progress}px` : '0px');
-    copy.inert = pinned && progress > .95;
+    // Modern browsers move this layer on the scroll timeline, independently
+    // of frame decoding. Older browsers update only composited properties;
+    // inherited custom properties used to restyle every text descendant.
+    if (!nativeCopyMotion) {
+      const opacity = String(pinned ? 1 - smooth(.08, .98, progress) : 1);
+      const transform = pinned ? `translate3d(0,${-height * .18 * progress}px,0)` : 'none';
+      if (copy.style.opacity !== opacity) copy.style.opacity = opacity;
+      if (copy.style.transform !== transform) copy.style.transform = transform;
+    }
+    const inert = pinned && progress > .95;
+    if (copy.inert !== inert) copy.inert = inert;
     if (!active()) {
       lastTick = 0;
       // Keep the last canvas pixels but free decoded frames below the hero.
@@ -240,6 +249,9 @@
     story.style.setProperty('--hero-height', `${height}px`);
     start = story.getBoundingClientRect().top + scrollY;
     distance = pinned ? Math.max(1, story.offsetHeight - height) : height * .7;
+    copy.style.setProperty('--hero-copy-start', `${start}px`);
+    copy.style.setProperty('--hero-copy-end', `${start + distance}px`);
+    copy.style.setProperty('--hero-copy-lift', `${-height * .18}px`);
     coveredAt = services.getBoundingClientRect().top + scrollY;
     schedule();
   }

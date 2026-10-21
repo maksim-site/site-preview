@@ -9,7 +9,24 @@
 /* No scroll interception: services cover the pinned hero in normal flow. */
 .hero-motion .hero-story{height:calc(var(--hero-height,100svh) + 70svh)}
 .hero-motion .hero-story .hero{position:sticky;top:0}
-.hero-motion .hero-grid{opacity:var(--hero-copy-opacity,1);transform:translate3d(0,var(--hero-copy-y,0px),0);will-change:transform,opacity}
+.hero-motion .hero-grid{will-change:transform,opacity}
+/* Only the text layer moves; no inherited styles change on each scroll frame. */
+@supports (animation-timeline:scroll(root block)) and (animation-range:0px 100px){
+  .hero-motion .hero-grid{
+    animation:hero-copy-shift auto linear both,hero-copy-fade auto linear both;
+    animation-timeline:scroll(root block);
+    animation-range:var(--hero-copy-start,0px) var(--hero-copy-end,1px);
+  }
+}
+@keyframes hero-copy-shift{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(0,var(--hero-copy-lift,0px),0)}
+}
+@keyframes hero-copy-fade{
+  0%,8%{opacity:1;animation-timing-function:cubic-bezier(.333333,0,.666667,1)}
+  98%,100%{opacity:0}
+}
+.hero-video-page .title-mask{perspective:none}
 .hero-motion .hero-story+.services{position:relative;z-index:2;margin-top:-65svh;border-radius:28px 28px 0 0}
 .hero-video-page .hero-story .hero-grid{min-height:0}
 .hero-video-page .hero-story .hero{padding-top:clamp(135px,20svh,178px);padding-bottom:clamp(44px,10svh,98px)}
@@ -27,14 +44,14 @@
   .hero-video-poster{transition:none}
   .hero-motion .hero-story{height:auto}
   .hero-motion .hero-story .hero{position:relative}
-  .hero-motion .hero-grid{opacity:1;transform:none;will-change:auto}
+  .hero-video-page .hero-grid{animation:none!important;opacity:1!important;transform:none!important;will-change:auto}
   .hero-motion .hero-story+.services{margin-top:0}
 }
 @media print{
   .hero-video{display:none}
   .hero-motion .hero-story{height:auto}
   .hero-motion .hero-story .hero{position:relative}
-  .hero-motion .hero-grid{opacity:1;transform:none}
+  .hero-video-page .hero-grid{animation:none!important;opacity:1!important;transform:none!important}
   .hero-motion .hero-story+.services{margin-top:0}
 }
 
@@ -66,4 +83,11 @@
 }
 @media(min-width:440px) and (max-width:599px){
   .hero-video-page .header-cta{font-size:13px;padding-inline:18px}
+}
+
+/* Current-section semantics stay available, without a persistent highlight. */
+.hero-video-page .main-nav a,.hero-video-page .main-nav a[aria-current=location]{background:transparent;color:var(--muted)}
+.hero-video-page .main-nav a:active{background:rgba(151,177,161,.13);color:var(--text)}
+@media(hover:hover) and (pointer:fine){
+  .hero-video-page .main-nav a:hover{background:rgba(151,177,161,.13);color:var(--text)}
 }
