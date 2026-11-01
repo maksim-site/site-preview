@@ -42,7 +42,7 @@
     if (loading) return;
     loading = true;
     try {
-      const T = await import('./motion-study/vendor/three.module.js');
+      const T = await import('./motion-study/vendor/three.module.min.js');
       // Network warming starts in the head. Build the offscreen scene in an
       // idle slot after the hero's first frame, rather than on its first scroll.
       if (!visible) await new Promise(resolve => {
