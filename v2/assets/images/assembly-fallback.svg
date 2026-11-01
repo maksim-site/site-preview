@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 700" fill="none">
+  <defs>
+    <linearGradient id="board" x1="194" y1="194" x2="522" y2="516" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3e56a3"/><stop offset=".54" stop-color="#263b82"/><stop offset="1" stop-color="#182651"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="305" y1="517" x2="551" y2="431" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#142149"/><stop offset="1" stop-color="#202e60"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="309" y1="280" x2="394" y2="386" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#68758d"/><stop offset=".14" stop-color="#303a50"/><stop offset="1" stop-color="#161e30"/>
+    </linearGradient>
+    <linearGradient id="silver" x1="425" y1="254" x2="461" y2="304" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f2f1e9"/><stop offset="1" stop-color="#8798a7"/>
+    </linearGradient>
+    <filter id="shadow" x="64" y="70" width="585" height="555" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="15"/>
+    </filter>
+  </defs>
+  <g transform="translate(350 350) rotate(38) scale(.65) translate(-350 -350)">
+  <path d="M158 229 493 122l109 344-335 108-109-345Z" fill="#111923" opacity=".32" filter="url(#shadow)"/>
+  <!-- dark laminate edge -->
+  <path d="m147 228 347-111v22L156 249l-9-21Z" fill="#5d6c9a"/>
+  <path d="m494 117 112 351v21L494 139v-22Z" fill="#17234b"/>
+  <path d="m147 228 347-111 112 351-347 111-112-351Z" fill="url(#board)" stroke="#8f9cbb" stroke-opacity=".6" stroke-width="3"/>
+  <path d="m166 236 322-103 100 332-323 104-99-333Z" stroke="#ccd4e6" stroke-opacity=".38" stroke-width="2"/>
+  <!-- copper routing -->
+  <g stroke="#d0a56c" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" opacity=".93">
+    <path d="m230 280 56-18 21 18 56-18 23 17 44-14"/>
+    <path d="m211 364 73-23 22 17 33-10"/>
+    <path d="m367 406 43-14 24 18 61-20"/>
+    <path d="m237 444 65-21 18 15 35-11"/>
+    <path d="m390 233 17 55 33 22-2 43"/>
+    <path d="m276 454-16 37 30 36"/>
+    <path d="m478 270 34-11 17 56"/>
+  </g>
+  <g fill="#e0bb82" stroke="#364374" stroke-width="5">
+    <circle cx="230" cy="280" r="11"/><circle cx="443" cy="263" r="11"/>
+    <circle cx="211" cy="364" r="11"/><circle cx="483" cy="390" r="11"/>
+    <circle cx="237" cy="444" r="11"/><circle cx="290" cy="527" r="11"/>
+    <circle cx="519" cy="315" r="11"/>
+  </g>
+  <!-- central processor and its gull-wing contacts -->
+  <g stroke="#dcbd86" stroke-width="5" stroke-linecap="round">
+    <path d="m303 276-19-8m31 23-20-8m32 23-21-8m33 23-21-8m33 23-21-8m32 23-20-8"/>
+    <path d="m384 250 20-7m-10 24 20-7m-10 25 20-7m-10 25 20-7m-10 25 20-7"/>
+    <path d="m318 385-20 7m32 18-20 7m32 18-20 7m32 18-20 7"/>
+    <path d="m398 360 20-7m-10 25 20-7m-10 25 20-7m-10 25 20-7"/>
+  </g>
+  <path d="m302 270 85-27 38 119-85 28-38-120Z" fill="#15203b" stroke="#aab5d0" stroke-opacity=".7" stroke-width="3"/>
+  <path d="m315 278 66-21 30 95-67 21-29-95Z" fill="url(#chip)" stroke="#8a97ad" stroke-opacity=".55" stroke-width="2"/>
+  <path d="m328 290 42-14m-36 27 47-15m-41 28 47-15m-41 28 47-15m-42 28 28-9" stroke="#a6b1c5" stroke-linecap="round" stroke-width="3" opacity=".55"/>
+  <circle cx="325" cy="286" r="5" fill="#dcbd86"/>
+  <!-- smaller components -->
+  <path d="m425 231 46-15 22 68-46 15-22-68Z" fill="#1a243d" stroke="#94a2bd" stroke-width="3"/>
+  <path d="m437 237 25-8 14 43-24 8-15-43Z" fill="url(#chip)"/>
+  <path d="m222 402 44-14 20 64-44 14-20-64Z" fill="#1a243d" stroke="#94a2bd" stroke-width="3"/>
+  <path d="m233 409 22-7 13 41-22 7-13-41Z" fill="url(#chip)"/>
+  <!-- capacitors and a board connector -->
+  <ellipse cx="457" cy="356" rx="22" ry="11" transform="rotate(-18 457 356)" fill="#9caaba"/>
+  <path d="m435 356 13 42 36-12-13-42-36 12Z" fill="url(#silver)" stroke="#dce3eb" stroke-opacity=".65" stroke-width="2"/>
+  <ellipse cx="471" cy="344" rx="22" ry="11" transform="rotate(-18 471 344)" fill="#f2f1e9"/>
+  <path d="m201 324 13 42 36-12-13-42-36 12Z" fill="url(#silver)" stroke="#dce3eb" stroke-opacity=".65" stroke-width="2"/>
+  <path d="m201 324 36-12" stroke="#f2f1e9" stroke-width="7"/>
+  <path d="m451 451 51-16 12 38-51 17-12-39Z" fill="#e3e8eb" stroke="#8491a8" stroke-width="3"/>
+  <path d="m460 456 32-10m-27 20 32-10m-26 20 31-10" stroke="#7c8aa3" stroke-width="4"/>
+  <!-- mounting holes -->
+  <g fill="#111a37" stroke="#d0a56c" stroke-width="7">
+    <ellipse cx="166" cy="233" rx="15" ry="10" transform="rotate(-18 166 233)"/>
+    <ellipse cx="490" cy="132" rx="15" ry="10" transform="rotate(-18 490 132)"/>
+    <ellipse cx="256" cy="570" rx="15" ry="10" transform="rotate(-18 256 570)"/>
+    <ellipse cx="600" cy="462" rx="15" ry="10" transform="rotate(-18 600 462)"/>
+  </g>
+  </g>
+</svg>

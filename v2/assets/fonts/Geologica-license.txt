@@ -1,0 +1,5 @@
+Copyright 2020 The Geologica Project Authors (https://github.com/googlefonts/geologica)
+
+https://scripts.sil.org/OFL
+
+Source: https://fonts.google.com/specimen/Geologica
