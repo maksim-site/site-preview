@@ -21,7 +21,8 @@ syncTheme();
 
 const menuButton = $('.menu-toggle');
 const navigation = $('#main-nav');
-const mobileMenu = matchMedia('(max-width: 899px)');
+// The main page fits its full navigation from 600px; the comparison pages switch at 900px.
+const mobileMenu = matchMedia(document.body.classList.contains('hero-video-page') ? '(max-width: 599px)' : '(max-width: 899px)');
 function setMenu(open) {
   const expanded = mobileMenu.matches && open;
   menuButton.setAttribute('aria-expanded', String(expanded));

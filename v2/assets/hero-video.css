@@ -67,7 +67,7 @@
   .hero-video-page .main-nav a,.hero-video-page .header-cta{font-size:14px}
 }
 @media(max-width:899px){
-  .hero-video-page .header-inner{width:min(560px,calc(100% - 28px));max-width:calc(100% - 28px)}
+  .hero-video-page .header-inner{width:max-content;max-width:calc(100% - 28px)}
   .hero-video-page .header-cta{font-size:14px}
 }
 @media(max-width:599px){
@@ -75,14 +75,22 @@
   .hero-video-page .hero-kicker{font-size:14px;max-width:100%}
 }
 
-/* Keep the request action while it fits; size the wider mobile capsule to its content. */
-@media(min-width:440px) and (max-width:899px){
-  .hero-video-page .header-inner{width:max-content;gap:20px}
+/* The capsule always hugs its content: the request action joins from 370px,
+   and the full navigation replaces the menu button as soon as it fits. */
+@media(max-width:599px){
+  .hero-video-page .header-inner{gap:20px}
   .hero-video-page .header-actions{gap:8px}
-  .hero-video-page .header-cta{display:flex;white-space:nowrap;flex-shrink:0}
 }
-@media(min-width:440px) and (max-width:599px){
-  .hero-video-page .header-cta{font-size:13px;padding-inline:18px}
+@media(min-width:370px) and (max-width:599px){
+  .hero-video-page .header-cta{display:flex;white-space:nowrap;flex-shrink:0;font-size:13px;padding-inline:18px}
+}
+@media(min-width:600px) and (max-width:899px){
+  .hero-video-page .header-inner{height:72px;gap:18px;padding-inline:19px}
+  .hero-video-page .header-actions{margin-left:-14px}
+  .hero-video-page .main-nav,.hero-video-page .main-nav[hidden]{display:flex;position:static;flex-direction:row;align-items:center;width:auto;transform:none;margin:0;padding:4px;gap:5px;border:0;border-radius:999px;background:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none}
+  .hero-video-page .main-nav>a{font-size:14px;padding:10px;border-radius:999px}
+  .hero-video-page .menu-toggle{display:none}
+  .hero-video-page .header-cta{display:flex;white-space:nowrap}
 }
 
 /* Current-section semantics stay available, without a persistent highlight. */
