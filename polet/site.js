@@ -11,7 +11,7 @@
   // Мобильное меню
   const dialog = document.querySelector('.mobile-menu'), trigger = document.querySelector('.menu-trigger');
   if (dialog && trigger) {
-    trigger.addEventListener('click', () => { dialog.showModal(); trigger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; });
+    trigger.addEventListener('click', () => { dialog.showModal(); dialog.focus(); trigger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; });
     const close = () => dialog.close();
     dialog.querySelector('.menu-close').addEventListener('click', close);
     dialog.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
