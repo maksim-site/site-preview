@@ -19,7 +19,8 @@ h1{font-size:clamp(56px,7.2vw,116px);line-height:1.04}
 h2{font-size:clamp(42px,5vw,78px);line-height:1.08}
 h3{font-size:clamp(25px,2.5vw,40px);line-height:1.16}
 p{line-height:1.6}
-a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:0}
+:focus,:focus-visible{outline:none}
+.kbd a:focus-visible,.kbd button:focus-visible{outline:2px solid var(--blue);outline-offset:0}
 ::selection{background:#bdd7e6;color:#102d42}
 .wrap{margin-inline:var(--pad)}
 .eyebrow{font-size:12px;letter-spacing:.075em;text-transform:uppercase;font-weight:500}
@@ -72,7 +73,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offse
 .hero-contacts{display:flex;gap:44px;align-items:center}
 .hero-contacts a:first-child{font-size:clamp(18px,1.8vw,26px)}
 .hero-contacts a:last-child{font-size:14px;opacity:.85}
-.hero a:focus-visible,.hero button:focus-visible{outline-color:white}
+.kbd .hero a:focus-visible,.kbd .hero button:focus-visible{outline-color:white}
 .video-controls{display:flex;align-items:center;gap:20px}
 .video-scenes{display:flex;gap:6px;list-style:none;margin:0;padding:0}
 .video-scenes li{width:44px;height:2px;background:rgba(255,255,255,.3);overflow:hidden}

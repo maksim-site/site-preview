@@ -1,5 +1,9 @@
 (() => {
   document.documentElement.classList.add('js');
+  // Рамки фокуса только при работе с клавиатуры, не при нажатиях пальцем или мышью
+  const root = document.documentElement;
+  addEventListener('keydown', (e) => { if (e.key === 'Tab') root.classList.add('kbd'); });
+  addEventListener('pointerdown', () => root.classList.remove('kbd'));
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   // Шапка закреплена сверху; после прокрутки появляется тонкая линия
@@ -23,7 +27,7 @@
       history.pushState(null, '', a.hash);
       requestAnimationFrame(() => target.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' }));
     }));
-    dialog.addEventListener('close', () => { trigger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; trigger.focus({ preventScroll: true }); });
+    dialog.addEventListener('close', () => { trigger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; if (root.classList.contains('kbd')) trigger.focus({ preventScroll: true }); else document.activeElement?.blur(); });
   }
 
   // Появление блоков при прокрутке
