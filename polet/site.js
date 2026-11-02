@@ -16,16 +16,26 @@
   const dialog = document.querySelector('.mobile-menu'), trigger = document.querySelector('.menu-trigger');
   if (dialog && trigger) {
     trigger.addEventListener('click', () => { dialog.showModal(); dialog.focus(); trigger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; });
-    const close = () => { dialog.close(); document.body.style.overflow = ''; };
-    dialog.querySelector('.menu-close').addEventListener('click', close);
+    // Закрытие с анимацией: шторка уезжает вверх, затем окно закрывается
+    const close = (then) => {
+      if (!dialog.open || dialog.classList.contains('is-closing')) return;
+      const done = () => { dialog.classList.remove('is-closing'); dialog.close(); document.body.style.overflow = ''; then?.(); };
+      if (reduce.matches) return done();
+      dialog.classList.add('is-closing');
+      const onEnd = (e) => { if (e.target !== dialog) return; dialog.removeEventListener('animationend', onEnd); done(); };
+      dialog.addEventListener('animationend', onEnd);
+    };
+    dialog.querySelector('.menu-close').addEventListener('click', () => close());
+    dialog.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
     // Якорь из меню: сначала закрыть окно, потом прокрутить (пока окно открыто, браузер не скроллит)
     dialog.querySelectorAll('a').forEach((a) => a.addEventListener('click', (e) => {
-      close();
       const target = a.hash && a.pathname === location.pathname && document.querySelector(a.hash);
-      if (!target) return;
+      if (!target) { dialog.close(); return; }
       e.preventDefault();
-      history.pushState(null, '', a.hash);
-      requestAnimationFrame(() => target.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' }));
+      close(() => {
+        history.pushState(null, '', a.hash);
+        requestAnimationFrame(() => target.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' }));
+      });
     }));
     dialog.addEventListener('close', () => { trigger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; if (root.classList.contains('kbd')) trigger.focus({ preventScroll: true }); else document.activeElement?.blur(); });
   }
