@@ -378,7 +378,7 @@ img{background-color:#dfe4e6;background-size:cover;background-position:center}
 .photo-hero{position:relative;isolation:isolate;overflow:hidden;min-height:min(100vh,1000px);min-height:min(100svh,1000px);display:flex;align-items:flex-end;background:#132b3b;color:#fff}
 .photo-hero-img{position:absolute;inset:0;z-index:-2}
 .photo-hero-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(7,27,42,.55),transparent 26%),linear-gradient(90deg,rgba(7,27,42,.62),rgba(7,27,42,.12) 70%),linear-gradient(0deg,rgba(9,27,40,.82),transparent 55%)}
-.photo-hero-copy{width:100%;padding-block:calc(var(--header-h) + 60px) clamp(48px,7vw,104px)}
+.photo-hero-copy{flex:1 1 auto;min-width:0;padding-block:calc(var(--header-h) + 60px) clamp(48px,7vw,104px)}
 .photo-hero-copy .eyebrow{margin-bottom:28px;color:rgba(255,255,255,.82)}
 .photo-hero h1{max-width:1160px}
 .photo-hero h1 .muted{color:rgba(255,255,255,.66)}
@@ -398,7 +398,7 @@ img{background-color:#dfe4e6;background-size:cover;background-position:center}
 @media(max-width:850px){.photo-band-copy{grid-template-columns:1fr;gap:30px}}
 @media(max-width:600px){.photo-hero{min-height:88svh}
 .photo-hero-copy{padding-block:calc(var(--header-h) + 40px) 44px}
-.photo-hero h1{font-size:44px;line-height:1.08;letter-spacing:-.05em}
+.photo-hero h1{font-size:clamp(34px,11vw,44px);line-height:1.08;letter-spacing:-.035em;overflow-wrap:break-word}
 .photo-hero .page-lead{font-size:15px;margin-top:22px}
 .photo-band{margin-bottom:70px}
 .photo-band-copy{padding-block:72px}
