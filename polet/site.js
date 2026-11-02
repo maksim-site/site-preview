@@ -12,10 +12,18 @@
   const dialog = document.querySelector('.mobile-menu'), trigger = document.querySelector('.menu-trigger');
   if (dialog && trigger) {
     trigger.addEventListener('click', () => { dialog.showModal(); dialog.focus(); trigger.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; });
-    const close = () => dialog.close();
+    const close = () => { dialog.close(); document.body.style.overflow = ''; };
     dialog.querySelector('.menu-close').addEventListener('click', close);
-    dialog.querySelectorAll('a').forEach((a) => a.addEventListener('click', close));
-    dialog.addEventListener('close', () => { trigger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; trigger.focus(); });
+    // Якорь из меню: сначала закрыть окно, потом прокрутить (пока окно открыто, браузер не скроллит)
+    dialog.querySelectorAll('a').forEach((a) => a.addEventListener('click', (e) => {
+      close();
+      const target = a.hash && a.pathname === location.pathname && document.querySelector(a.hash);
+      if (!target) return;
+      e.preventDefault();
+      history.pushState(null, '', a.hash);
+      requestAnimationFrame(() => target.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth' }));
+    }));
+    dialog.addEventListener('close', () => { trigger.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; trigger.focus({ preventScroll: true }); });
   }
 
   // Появление блоков при прокрутке
