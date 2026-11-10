@@ -48,8 +48,11 @@ p{line-height:1.6}
 .mobile-menu::backdrop{background:rgba(10,25,40,.5)}
 .mobile-menu:focus{outline:none}
 .menu-top{padding:20px 24px;display:flex;justify-content:space-between;align-items:center}
-.menu-close{background:none;border:0;display:flex;align-items:center;gap:20px;padding:12px 0;font-size:13px}
-.menu-close span{font-size:32px}
+.menu-close{background:none;border:0;display:grid;place-items:center;width:44px;height:44px;margin-right:-10px;padding:0;color:inherit}
+.menu-close i{position:relative;width:24px;height:24px;transition:transform .3s var(--ease)}
+.menu-close i::before,.menu-close i::after{content:'';position:absolute;left:0;top:50%;width:100%;border-top:1px solid;transform:rotate(45deg)}
+.menu-close i::after{transform:rotate(-45deg)}
+.menu-close:hover i{transform:rotate(90deg)}
 .mobile-menu nav{padding:40px 24px}
 .mobile-menu nav a{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:18px 0;border-bottom:1px solid var(--line);font:350 clamp(29px,7vw,45px)/1.2 Geo,sans-serif;letter-spacing:-.035em}
 .mobile-menu nav a .ico-arrow{width:26px;height:26px;color:var(--muted)}
